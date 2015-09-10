@@ -121,19 +121,7 @@ Ext.define('Ext.ux.InlineRemoteMultiSort', {
         }
 
         // Reverse the sort for initial ASC columns
-
-        Ext.each(
-            this.grid.defaultSorters,
-            function(element){
-                // Add new values to the sorter, uses double quote to allow for cold fusion's
-                // deserialize json method.
-                // CF Server side code to parse into array :  <cfset sorters = deserializeJSON(#form.sort#) />
-                store.proxy.extraParams.sort = store.proxy.extraParams.sort + '{"item":"' + element.property + '","direction":"' + element.direction + '"},';
-                // Single quote version for other server side programming languages
-                //store.proxy.extraParams.sort = store.proxy.extraParams.sort + '{\'item\':\'' + element.property + '\',\'direction\:\'' + element.direction + '\'},';
-            }
-        );
-        store.proxy.extraParams.sort = '[' + store.proxy.extraParams.sort.replace(/(^,)|(,$)/g, "") + ']';
+        store.proxy.extraParams.sort = JSON.stringify(this.grid.defaultSorters);
     },
 
     onAfterRender : function(me) {
